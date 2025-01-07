@@ -1,3 +1,10 @@
+name: Publish and Release
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
   build-publish-release:
     runs-on: ubuntu-latest
