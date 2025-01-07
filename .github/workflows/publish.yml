@@ -4,67 +4,41 @@ on:
   push:
     branches:
       - main
+      - 'release/*'
+  pull_request:
+    branches:
+      - main
+      - 'release/*'
 
 jobs:
-  build-publish-release:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        token: ${{ secrets.GH_TOKEN }}
+    - name: Checkout code
+      uses: actions/checkout@v2
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v2
       with:
         python-version: '3.10'
 
     - name: Install Poetry
-      uses: snok/install-poetry@v1
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
 
     - name: Install dependencies
-      run: |
-        poetry lock
-        poetry install
+      run: poetry install
 
-    - name: Build the package
+    - name: Run tests
+      run: poetry run pytest
+
+    - name: Build distribution
       run: poetry build
 
-    - name: Get the current version
-      id: get_version
-      run: |
-        VERSION=$(poetry version -s)
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
-
-    - name: Check if tag exists and create a new one
-      id: check_tag
-      run: |
-        git fetch --tags
-        if git tag -l | grep -q "v$VERSION"; then
-          echo "Tag v$VERSION already exists, incrementing version"
-          NEW_VERSION=$(poetry version patch)
-          echo "VERSION=$NEW_VERSION" >> $GITHUB_ENV
-          echo "new_version=true" >> $GITHUB_ENV
-        else
-          echo "new_version=false" >> $GITHUB_ENV
-        fi
-
-    - name: Tag the commit with version (if new version)
-      if: env.new_version == 'true'
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git tag "v$VERSION"
-        git push origin "v$VERSION"
-
-    - name: Create a new release (if new version)
-      if: env.new_version == 'true'
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: "v$VERSION"
-        name: "Release v$VERSION"
-        files: |
-          dist/*
+    - name: Publish to PyPI
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release/')
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+      run: poetry publish --build
