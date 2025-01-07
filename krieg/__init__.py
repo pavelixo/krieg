@@ -1,0 +1,1 @@
+from .applications import Krieg as Krieg

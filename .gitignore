@@ -14,6 +14,7 @@ env/
 
 # pytest cache
 .cache/
+.pytest_cache/
 
 # Coverage directory used by tools like coverage.py
 .coverage
