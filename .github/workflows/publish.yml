@@ -34,6 +34,7 @@ jobs:
       run: poetry build
 
     - name: Get the current version
+      id: get_version
       run: |
         VERSION=$(poetry version -s)
         echo "VERSION=$VERSION" >> $GITHUB_ENV
@@ -56,6 +57,8 @@ jobs:
     - name: Tag the commit with version (if new version)
       if: env.new_version == 'true'
       run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git tag "v$VERSION"
         git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/pavelixo/krieg.git
         git push origin "v$VERSION"
@@ -64,6 +67,8 @@ jobs:
       if: env.new_version == 'true'
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: "v$VERSION"
+        name: "Release v$VERSION"
         files: |
           dist/*
       env:
