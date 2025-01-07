@@ -39,7 +39,7 @@ jobs:
 
     - name: Publish to PyPI
       if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release/')
-      run: poetry publish --build --username __token__ --password ${{ secrets.PYPI_TOKEN }}
+      run: poetry publish --build --username __token__ --password ${{ secrets.PYPI_TOKEN }} --no-interaction
 
     - name: Create GitHub Release
       if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release/')
