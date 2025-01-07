@@ -39,6 +39,7 @@ jobs:
     - name: Tag the commit with version
       run: |
         git tag "v$VERSION"
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/pavelixo/krieg.git
         git push origin "v$VERSION"
 
     - name: Create a new release
