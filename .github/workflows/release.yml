@@ -13,9 +13,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up Git
-      uses: actions/setup-git@v2
-
     - name: Get the current version
       run: |
         VERSION=$(python setup.py --version)
