@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Git
+      uses: actions/setup-git@v2
+
+    - name: Get the current version
+      run: |
+        VERSION=$(python setup.py --version)
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Create a new release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          dist/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Tag the commit
+      run: |
+        git tag "v$VERSION"
+        git push origin "v$VERSION"
