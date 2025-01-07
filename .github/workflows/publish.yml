@@ -34,10 +34,6 @@ jobs:
     - name: Install dependencies
       run: poetry install
 
-    - name: Run tests
-      run: poetry run pytest
-      continue-on-error: true
-
     - name: Build distribution
       run: poetry build
 
