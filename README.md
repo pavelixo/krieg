@@ -1,2 +1,1 @@
-# Krieg
----
+# Krieg framework

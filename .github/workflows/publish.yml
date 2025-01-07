@@ -11,19 +11,17 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         token: ${{ secrets.GH_TOKEN }}
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
     - name: Install Poetry
-      run: |
-        curl -sSL https://install.python-poetry.org | python3 -
-        echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+      uses: snok/install-poetry@v1
 
     - name: Install dependencies
       run: |
@@ -42,15 +40,13 @@ jobs:
     - name: Check if tag exists and create a new one
       id: check_tag
       run: |
-        VERSION=$(poetry version -s)
         git fetch --tags
         if git tag -l | grep -q "v$VERSION"; then
           echo "Tag v$VERSION already exists, incrementing version"
-          VERSION=$(echo $VERSION | awk -F. -v OFS=. '{$NF++; print $0}')
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          NEW_VERSION=$(poetry version patch)
+          echo "VERSION=$NEW_VERSION" >> $GITHUB_ENV
           echo "new_version=true" >> $GITHUB_ENV
         else
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "new_version=false" >> $GITHUB_ENV
         fi
 
@@ -60,7 +56,6 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git tag "v$VERSION"
-        git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/pavelixo/krieg.git
         git push origin "v$VERSION"
 
     - name: Create a new release (if new version)
