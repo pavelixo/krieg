@@ -1,9 +1,6 @@
 name: Publish and Release
 
 on:
-  release:
-    types:
-      - created
   push:
     branches:
       - main
@@ -34,22 +31,17 @@ jobs:
     - name: Build the package
       run: poetry build
 
-    - name: Publish to PyPI
-      if: github.event_name == 'release'
-      env:
-        PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
-        PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-      run: |
-        poetry config pypi-token.pypi $PYPI_PASSWORD
-        poetry publish --build --username $PYPI_USERNAME --password $PYPI_PASSWORD
-
     - name: Get the current version
       run: |
         VERSION=$(poetry version -s)
         echo "VERSION=$VERSION" >> $GITHUB_ENV
 
+    - name: Tag the commit with version
+      run: |
+        git tag "v$VERSION"
+        git push origin "v$VERSION"
+
     - name: Create a new release
-      if: github.event_name == 'push'
       uses: softprops/action-gh-release@v1
       with:
         files: |
@@ -57,8 +49,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Tag the commit
-      if: github.event_name == 'push'
+    - name: Publish to PyPI
+      env:
+        PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
-        git tag "v$VERSION"
-        git push origin "v$VERSION"
+        poetry config pypi-token.pypi $PYPI_PASSWORD
+        poetry publish --build --username $PYPI_USERNAME --password $PYPI_PASSWORD
