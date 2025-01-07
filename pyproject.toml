@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "krieg"
+version = "0.1.0"
+description = "Krieg framework, a lightweight asynchronous web framework built with Python, focused on simplicity and performance."
+authors = ["pavelixo <pavelixo@icloud.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
