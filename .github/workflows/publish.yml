@@ -2,12 +2,7 @@ name: Publish
 
 on:
   push:
-    branches:
-      - main
-      - 'release/*'
-  pull_request:
-    branches:
-      - main
+    tags:
       - 'release/*'
 
 jobs:
