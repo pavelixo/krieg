@@ -38,8 +38,14 @@ jobs:
         VERSION=$(poetry version -s)
         echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-    - name: Tag the commit with version
+    - name: Check if tag exists and create a new one
       run: |
+        VERSION=$(poetry version -s)
+        git fetch --tags
+        if git tag -l | grep -q "v$VERSION"; then
+          echo "Tag v$VERSION already exists, incrementing version"
+          VERSION=$(echo $VERSION | awk -F. -v OFS=. '{$NF++; print $0}')
+        fi
         git tag "v$VERSION"
         git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/pavelixo/krieg.git
         git push origin "v$VERSION"
