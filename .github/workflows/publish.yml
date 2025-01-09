@@ -23,8 +23,10 @@ jobs:
         curl -sSL https://install.python-poetry.org | python3 -
         export PATH="$HOME/.local/bin:$PATH"
 
-    - name: Install dependencies
-      run: poetry install --no-interaction --no-root
+    - name: Ensure lock file is up-to-date
+      run: |
+        poetry lock --no-interaction
+        poetry install --no-interaction --no-root
 
     - name: Build the package
       run: poetry build
