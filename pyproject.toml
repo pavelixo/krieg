@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "krieg"
-version = "1.0.0"
+version = "1.0"
 description = "Krieg framework, a lightweight asynchronous web framework built with Python, focused on simplicity and performance."
 authors = ["pavelixo <pavelixo@icloud.com>"]
 license = "MIT"
