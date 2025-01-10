@@ -16,13 +16,13 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.10"
+python = "^3.10"
 asgiref = "^3.8.1"
 
 [tool.poetry.group.test.dependencies]
-pytest = ">=8.3.4"
-pytest-asyncio = ">=0.25.1"
-
+pytest = "^8.3.4"
+pytest-mock = "*"
+pytest-asyncio = "^0.25.1"
 
 [tool.poetry.group.dev.dependencies]
 uvicorn = "^0.34.0"
