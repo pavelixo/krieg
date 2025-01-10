@@ -1,5 +1,6 @@
 from typing import List, Tuple, Dict
 
+
 class Header:
     def __init__(self, headers: List[Tuple[bytes, bytes]] = None):
         """

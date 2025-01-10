@@ -6,5 +6,5 @@ class HTTP:
     async def handle(self, scope: Scope, receive: ASGIReceiveCallable, send: ASGISendCallable):
         request = Request(scope, receive)
         body = await request.body()
-        response = Response(body=body)
+        response = Response(body=body, headers=request.headers)
         await response.send(send)

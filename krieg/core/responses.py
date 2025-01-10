@@ -1,21 +1,33 @@
-from typing import Dict, Any
+from typing import Dict, Any, List, Tuple, Union
 from krieg.core.headers import Header
 from krieg.core.types import ASGISendCallable
 
-
 class Response:
-    def __init__(self, status: int = 200, headers: Dict[str, str] = None, body: bytes = b""):
+    def __init__(self, status: int = 200, headers: Union[Dict[str, str], List[Tuple[bytes, bytes]]] = None, body: bytes = b""):
         """
         Initializes the Response object.
 
         :param status: The HTTP status code of the response (default: 200).
-        :param headers: A dictionary of response headers (default: None).
+        :param headers: A dictionary or list of tuples of response headers (default: None).
         :param body: The body of the response as bytes (default: empty bytes).
         """
         self.status = status
-        headers = [(key.encode("utf-8"), value.encode("utf-8")) for key, value in (headers or {}).items()]
-        self.headers = Header(headers)
+        self.headers = Header(self._convert_headers(headers) if headers else [])
         self.body = body
+
+    def _convert_headers(self, headers: Union[Dict[str, str], List[Tuple[bytes, bytes]]]) -> List[Tuple[bytes, bytes]]:
+        """
+        Converts headers to a list of tuples of bytes.
+
+        :param headers: A dictionary or list of tuples of headers.
+        :return: A list of tuples of bytes.
+        """
+        if isinstance(headers, dict):
+            return [(key.encode() if isinstance(key, str) else key, value.encode() if isinstance(value, str) else value) for key, value in headers.items()]
+        elif isinstance(headers, list):
+            return headers
+        else:
+            raise ValueError("Headers must be a dictionary or a list of tuples.")
 
     def to_asgi(self) -> Dict[str, Any]:
         """
