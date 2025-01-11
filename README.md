@@ -4,7 +4,7 @@
 
 # Krieg framework
 
-The **Krieg** is a minimal, lightweight asynchronous web framework built with Python, focusing on simplicity and performance. Built on **aiohttp**, it efficiently handles concurrent requests in a non-blocking manner, offering high performance for scalable web applications.
+The **Krieg** is a minimal, lightweight asynchronous web framework built with Python, focusing on simplicity and performance. it efficiently handles concurrent requests in a non-blocking manner, offering high performance for scalable web applications.
 
 ## Documentation
 

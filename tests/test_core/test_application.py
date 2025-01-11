@@ -2,7 +2,6 @@ import pytest
 from krieg.core.application import Application
 from krieg.core.responses import Response
 from krieg.core.requests import Request
-from krieg.core.types import Scope, ASGIReceiveCallable, ASGISendCallable
 
 @pytest.mark.asyncio
 async def test_application_call(mocker):

@@ -1,7 +1,4 @@
 import pytest
-from typing import Dict, Any
-from krieg.core.headers import Header
-from krieg.core.types import ASGISendCallable
 from krieg.core.responses import Response
 
 @pytest.mark.asyncio

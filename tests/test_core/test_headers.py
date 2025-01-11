@@ -1,5 +1,4 @@
 import pytest
-from typing import List, Tuple
 from krieg.core.headers import Header
 
 def test_initialize_empty_headers():

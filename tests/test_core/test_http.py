@@ -1,8 +1,5 @@
 import pytest
 from krieg.core.http import HTTP
-from krieg.core.responses import Response
-from krieg.core.requests import Request
-from krieg.core.types import Scope, ASGIReceiveCallable, ASGISendCallable
 
 @pytest.mark.asyncio
 async def test_handle(mocker):

@@ -51,7 +51,8 @@ class Request:
 
         :return: A dictionary of headers where both keys and values are bytes.
         """
-        return dict(self.header.get_headers())
+        # Instead of directly using a list of headers, we now rely on the MultiValueDict
+        return {key: value for key, value in self.header.get_headers()}
 
     @property
     def method(self) -> str:

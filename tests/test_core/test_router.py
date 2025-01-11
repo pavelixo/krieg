@@ -1,5 +1,4 @@
 import pytest
-from typing import Callable, Awaitable
 from krieg.core.router import Router
 from krieg.core.responses import Response
 from krieg.core.requests import Request
